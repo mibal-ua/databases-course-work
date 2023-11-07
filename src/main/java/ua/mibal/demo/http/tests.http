@@ -1,0 +1,79 @@
+### отримати всі
+
+GET http://localhost:8080/assignments
+
+### отримати за id=1
+
+GET http://localhost:8080/assignments/1
+
+### послати та створити
+
+POST http://localhost:8080/assignments
+Content-Type: application/json
+
+{
+  "localDateTime": "2023-11-07T21:04:00",
+  "collaboratorId": 1,
+  "taskId": 2
+}
+
+### змінити тільки 1 поле
+
+PATCH http://localhost:8080/assignments/1
+Content-Type: application/json
+
+{
+  "collaboratorId": 3
+}
+
+### видалити
+
+DELETE http://localhost:8080/assignments/1
+
+
+
+
+
+
+
+### отримати всі
+
+GET http://localhost:8080/taskComments
+
+### отримати за id=1
+
+GET http://localhost:8080/taskComments/4
+
+### послати та створити
+
+POST http://localhost:8080/taskComments
+Content-Type: application/json
+
+{
+  "subject": "TEST SUBJECT",
+  "text": "TEXT",
+  "localDateTime": "2023-11-07T21:04:00",
+  "authorId": 2,
+  "taskId": 2
+}
+
+### змінити тільки 1 поле
+
+PATCH http://localhost:8080/taskComments/4
+Content-Type: application/json
+
+{
+  "text": "UPDATED TEXT"
+}
+
+### видалити
+
+DELETE http://localhost:8080/taskComments/1
+
+
+
+
+
+
+
+
