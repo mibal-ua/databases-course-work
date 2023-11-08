@@ -17,7 +17,7 @@ Content-Type: application/json
   "taskId": 2
 }
 
-### змінити тільки 1 поле
+### змінити тільки поле 'collaboratorId'
 
 PATCH http://localhost:8080/assignments/1
 Content-Type: application/json
@@ -42,7 +42,7 @@ GET http://localhost:8080/taskComments
 
 ### отримати за id=1
 
-GET http://localhost:8080/taskComments/4
+GET http://localhost:8080/taskComments/1
 
 ### послати та створити
 
@@ -57,7 +57,7 @@ Content-Type: application/json
   "taskId": 2
 }
 
-### змінити тільки 1 поле
+### змінити тільки поле 'text'
 
 PATCH http://localhost:8080/taskComments/4
 Content-Type: application/json
