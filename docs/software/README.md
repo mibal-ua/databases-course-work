@@ -462,3 +462,415 @@ COMMIT;
 
 ## RESTfull сервіс для управління даними
 
+### Entities:
+
+**Assignment.java**
+```java
+package ua.mibal.demo.model;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
+
+/**
+ * @author Mykhailo Balakhon
+ * @link <a href="mailto:9mohapx9@gmail.com">email</a>
+ */
+@NoArgsConstructor
+@Getter
+@Setter
+@Entity
+@Table(name = "Assignment")
+public class Assignment {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "datetime")
+    private LocalDateTime localDateTime;
+
+    @Column(name = "Collaborator_id", nullable = false)
+    private Long collaboratorId;
+
+    @Column(name = "Task_id", nullable = false)
+    private Long taskId;
+}
+```
+
+**TaskComment.java**
+```java
+package ua.mibal.demo.model;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
+
+/**
+ * @author Mykhailo Balakhon
+ * @link <a href="mailto:9mohapx9@gmail.com">email</a>
+ */
+@NoArgsConstructor
+@Getter
+@Setter
+@Entity
+@Table(name = "Task_comment")
+public class TaskComment {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "subject", nullable = false)
+    private String subject;
+
+    @Column(name = "text", nullable = false)
+    private String text;
+
+    @Column(name = "dateTime")
+    private LocalDateTime localDateTime;
+
+    @Column(name = "Author_id", nullable = false)
+    private Long authorId;
+
+    @Column(name = "Task_id", nullable = false)
+    private Long taskId;
+}
+```
+### Repositories
+
+**AssignmentRepository.java**
+```java
+package ua.mibal.demo.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import ua.mibal.demo.model.Assignment;
+
+/**
+ * @author Mykhailo Balakhon
+ * @link <a href="mailto:9mohapx9@gmail.com">email</a>
+ */
+public interface AssignmentRepository extends JpaRepository<Assignment, Long> {
+}
+```
+
+**TaskCommentRepository.java**
+```java
+package ua.mibal.demo.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import ua.mibal.demo.model.TaskComment;
+
+/**
+ * @author Mykhailo Balakhon
+ * @link <a href="mailto:9mohapx9@gmail.com">email</a>
+ */
+public interface TaskCommentRepository extends JpaRepository<TaskComment, Long> {
+}
+```
+
+### Generated Automatically by Spring Controllers
+
+**RepositoryEntityController.java**
+```java
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by FernFlower decompiler)
+//
+
+package org.springframework.data.rest.webmvc;
+
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Stream;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationEventPublisherAware;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mapping.PersistentEntity;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.data.repository.support.RepositoryInvoker;
+import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
+import org.springframework.data.rest.core.event.AfterCreateEvent;
+import org.springframework.data.rest.core.event.AfterDeleteEvent;
+import org.springframework.data.rest.core.event.AfterSaveEvent;
+import org.springframework.data.rest.core.event.BeforeCreateEvent;
+import org.springframework.data.rest.core.event.BeforeDeleteEvent;
+import org.springframework.data.rest.core.event.BeforeSaveEvent;
+import org.springframework.data.rest.core.mapping.ResourceMetadata;
+import org.springframework.data.rest.core.mapping.ResourceType;
+import org.springframework.data.rest.core.mapping.SearchResourceMappings;
+import org.springframework.data.rest.core.mapping.SupportedHttpMethods;
+import org.springframework.data.rest.webmvc.support.BackendId;
+import org.springframework.data.rest.webmvc.support.DefaultedPageable;
+import org.springframework.data.rest.webmvc.support.ETag;
+import org.springframework.data.rest.webmvc.support.RepositoryEntityLinks;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.Links;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.UriTemplate;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+@RepositoryRestController
+class RepositoryEntityController implements ApplicationEventPublisherAware {
+    private static final String BASE_MAPPING = "/{repository}";
+    private static final List<String> ACCEPT_PATCH_HEADERS;
+    private static final String ACCEPT_HEADER = "Accept";
+    private static final String LINK_HEADER = "Link";
+    private final RepositoryEntityLinks entityLinks;
+    private final RepositoryRestConfiguration config;
+    private final HttpHeadersPreparer headersPreparer;
+    private final ResourceStatus resourceStatus;
+    private ApplicationEventPublisher publisher;
+
+    @Autowired
+    public RepositoryEntityController(RepositoryRestConfiguration config, RepositoryEntityLinks entityLinks, HttpHeadersPreparer headersPreparer) {
+        this.entityLinks = entityLinks;
+        this.config = config;
+        this.headersPreparer = headersPreparer;
+        this.resourceStatus = ResourceStatus.of(headersPreparer);
+    }
+
+    public void setApplicationEventPublisher(ApplicationEventPublisher publisher) {
+        this.publisher = publisher;
+    }
+
+    @RequestMapping(
+        value = {"/{repository}"},
+        method = {RequestMethod.OPTIONS}
+    )
+    public ResponseEntity<?> optionsForCollectionResource(RootResourceInformation information) {
+        HttpHeaders headers = new HttpHeaders();
+        SupportedHttpMethods supportedMethods = information.getSupportedMethods();
+        headers.setAllow(supportedMethods.getMethodsFor(ResourceType.COLLECTION).toSet());
+        return new ResponseEntity(headers, HttpStatus.OK);
+    }
+
+    @RequestMapping(
+        value = {"/{repository}"},
+        method = {RequestMethod.HEAD}
+    )
+    public ResponseEntity<?> headCollectionResource(RootResourceInformation resourceInformation, DefaultedPageable pageable) throws HttpRequestMethodNotSupportedException {
+        resourceInformation.verifySupportedMethod(HttpMethod.HEAD, ResourceType.COLLECTION);
+        RepositoryInvoker invoker = resourceInformation.getInvoker();
+        if (null == invoker) {
+            throw new ResourceNotFoundException();
+        } else {
+            Links links = Links.of(new Link[]{ControllerUtils.getDefaultSelfLink()}).and(this.getCollectionResourceLinks(resourceInformation, pageable));
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Link", links.toString());
+            return new ResponseEntity(headers, HttpStatus.NO_CONTENT);
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping(
+        value = {"/{repository}"},
+        method = {RequestMethod.GET}
+    )
+    public CollectionModel<?> getCollectionResource(@QuerydslPredicate RootResourceInformation resourceInformation, DefaultedPageable pageable, Sort sort, RepresentationModelAssemblers assemblers) throws ResourceNotFoundException, HttpRequestMethodNotSupportedException {
+        resourceInformation.verifySupportedMethod(HttpMethod.GET, ResourceType.COLLECTION);
+        RepositoryInvoker invoker = resourceInformation.getInvoker();
+        if (null == invoker) {
+            throw new ResourceNotFoundException();
+        } else {
+            Iterable<?> results = invoker.invokeFindAll(pageable.getPageable());
+            ResourceMetadata metadata = resourceInformation.getResourceMetadata();
+            return (CollectionModel)assemblers.toCollectionModel(results, metadata.getDomainType()).add(this.getCollectionResourceLinks(resourceInformation, pageable));
+        }
+    }
+
+    private Links getCollectionResourceLinks(RootResourceInformation resourceInformation, DefaultedPageable pageable) {
+        ResourceMetadata metadata = resourceInformation.getResourceMetadata();
+        SearchResourceMappings searchMappings = metadata.getSearchResourceMappings();
+        Links links = Links.of(new Link[]{Link.of(ProfileController.getPath(this.config, metadata), "profile")});
+        return searchMappings.isExported() ? links.and(new Link[]{this.entityLinks.linkFor(metadata.getDomainType()).slash(searchMappings.getPath()).withRel(searchMappings.getRel())}) : links;
+    }
+
+    @ResponseBody
+    @RequestMapping(
+        value = {"/{repository}"},
+        method = {RequestMethod.GET},
+        produces = {"application/x-spring-data-compact+json", "text/uri-list"}
+    )
+    public CollectionModel<?> getCollectionResourceCompact(@QuerydslPredicate RootResourceInformation resourceinformation, DefaultedPageable pageable, Sort sort, RepresentationModelAssemblers assemblers) throws ResourceNotFoundException, HttpRequestMethodNotSupportedException {
+        CollectionModel<?> resources = this.getCollectionResource(resourceinformation, pageable, sort, assemblers);
+        Stream var10000 = resources.getContent().stream();
+        Objects.requireNonNull(PersistentEntityResource.class);
+        var10000 = var10000.map(PersistentEntityResource.class::cast);
+        Objects.requireNonNull(resourceinformation);
+        Links links = (Links)var10000.map(resourceinformation::resourceLink).reduce(resources.getLinks(), (rec$, xva$0) -> {
+            return ((Links)rec$).and(new Link[]{xva$0});
+        }, Links::and);
+        CollectionModel<?> model = resources instanceof PagedModel ? PagedModel.empty(((PagedModel)resources).getMetadata()) : CollectionModel.empty();
+        return (CollectionModel)((CollectionModel)model).add(links);
+    }
+
+    @ResponseBody
+    @RequestMapping(
+        value = {"/{repository}"},
+        method = {RequestMethod.POST}
+    )
+    public ResponseEntity<RepresentationModel<?>> postCollectionResource(RootResourceInformation resourceInformation, PersistentEntityResource payload, PersistentEntityResourceAssembler assembler, @RequestHeader(value = "Accept",required = false) String acceptHeader) throws HttpRequestMethodNotSupportedException {
+        resourceInformation.verifySupportedMethod(HttpMethod.POST, ResourceType.COLLECTION);
+        return this.createAndReturn(payload.getContent(), resourceInformation.getInvoker(), assembler, this.config.returnBodyOnCreate(acceptHeader));
+    }
+
+    @RequestMapping(
+        value = {"/{repository}/{id}"},
+        method = {RequestMethod.OPTIONS}
+    )
+    public ResponseEntity<?> optionsForItemResource(RootResourceInformation information) {
+        HttpHeaders headers = new HttpHeaders();
+        SupportedHttpMethods supportedMethods = information.getSupportedMethods();
+        headers.setAllow(supportedMethods.getMethodsFor(ResourceType.ITEM).toSet());
+        headers.put("Accept-Patch", ACCEPT_PATCH_HEADERS);
+        return new ResponseEntity(headers, HttpStatus.OK);
+    }
+
+    @RequestMapping(
+        value = {"/{repository}/{id}"},
+        method = {RequestMethod.HEAD}
+    )
+    public ResponseEntity<?> headForItemResource(RootResourceInformation resourceInformation, @BackendId Serializable id, PersistentEntityResourceAssembler assembler) throws HttpRequestMethodNotSupportedException {
+        return (ResponseEntity)this.getItemResource(resourceInformation, id).map((it) -> {
+            Links links = assembler.toModel(it).getLinks();
+            HttpHeaders headers = this.headersPreparer.prepareHeaders(resourceInformation.getPersistentEntity(), it);
+            headers.add("Link", links.toString());
+            return new ResponseEntity(headers, HttpStatus.NO_CONTENT);
+        }).orElseThrow(() -> {
+            return new ResourceNotFoundException();
+        });
+    }
+
+    @RequestMapping(
+        value = {"/{repository}/{id}"},
+        method = {RequestMethod.GET}
+    )
+    public ResponseEntity<EntityModel<?>> getItemResource(RootResourceInformation resourceInformation, @BackendId Serializable id, final PersistentEntityResourceAssembler assembler, @RequestHeader HttpHeaders headers) throws HttpRequestMethodNotSupportedException {
+        return (ResponseEntity)this.getItemResource(resourceInformation, id).map((it) -> {
+            PersistentEntity<?, ?> entity = resourceInformation.getPersistentEntity();
+            return this.resourceStatus.getStatusAndHeaders(headers, it, entity).toResponseEntity(() -> {
+                return assembler.toFullResource(it);
+            });
+        }).orElseThrow(() -> {
+            return new ResourceNotFoundException();
+        });
+    }
+
+    @RequestMapping(
+        value = {"/{repository}/{id}"},
+        method = {RequestMethod.PUT}
+    )
+    public ResponseEntity<? extends RepresentationModel<?>> putItemResource(RootResourceInformation resourceInformation, PersistentEntityResource payload, @BackendId Serializable id, PersistentEntityResourceAssembler assembler, ETag eTag, @RequestHeader(value = "Accept",required = false) String acceptHeader) throws HttpRequestMethodNotSupportedException {
+        resourceInformation.verifySupportedMethod(HttpMethod.PUT, ResourceType.ITEM);
+        if (payload.isNew()) {
+            resourceInformation.verifyPutForCreation();
+        }
+
+        RepositoryInvoker invoker = resourceInformation.getInvoker();
+        Object objectToSave = payload.getContent();
+        eTag.verify(resourceInformation.getPersistentEntity(), objectToSave);
+        return payload.isNew() ? this.createAndReturn(objectToSave, invoker, assembler, this.config.returnBodyOnCreate(acceptHeader)) : this.saveAndReturn(objectToSave, invoker, HttpMethod.PUT, assembler, this.config.returnBodyOnUpdate(acceptHeader));
+    }
+
+    @RequestMapping(
+        value = {"/{repository}/{id}"},
+        method = {RequestMethod.PATCH}
+    )
+    public ResponseEntity<RepresentationModel<?>> patchItemResource(RootResourceInformation resourceInformation, PersistentEntityResource payload, @BackendId Serializable id, PersistentEntityResourceAssembler assembler, ETag eTag, @RequestHeader(value = "Accept",required = false) String acceptHeader) throws HttpRequestMethodNotSupportedException, ResourceNotFoundException {
+        resourceInformation.verifySupportedMethod(HttpMethod.PATCH, ResourceType.ITEM);
+        Object domainObject = payload.getContent();
+        eTag.verify(resourceInformation.getPersistentEntity(), domainObject);
+        return this.saveAndReturn(domainObject, resourceInformation.getInvoker(), HttpMethod.PATCH, assembler, this.config.returnBodyOnUpdate(acceptHeader));
+    }
+
+    @RequestMapping(
+        value = {"/{repository}/{id}"},
+        method = {RequestMethod.DELETE}
+    )
+    public ResponseEntity<?> deleteItemResource(RootResourceInformation resourceInformation, @BackendId Serializable id, ETag eTag, PersistentEntityResourceAssembler assembler, @RequestHeader(value = "Accept",required = false) String acceptHeader) throws ResourceNotFoundException, HttpRequestMethodNotSupportedException {
+        resourceInformation.verifySupportedMethod(HttpMethod.DELETE, ResourceType.ITEM);
+        RepositoryInvoker invoker = resourceInformation.getInvoker();
+        Optional<Object> domainObj = invoker.invokeFindById(id);
+        return (ResponseEntity)domainObj.map((it) -> {
+            PersistentEntity<?, ?> entity = resourceInformation.getPersistentEntity();
+            eTag.verify(entity, it);
+            this.publisher.publishEvent(new BeforeDeleteEvent(it));
+            invoker.invokeDeleteById(entity.getIdentifierAccessor(it).getIdentifier());
+            this.publisher.publishEvent(new AfterDeleteEvent(it));
+            return this.config.returnBodyOnDelete(acceptHeader) ? ResponseEntity.ok(assembler.toFullResource(it)) : new ResponseEntity(HttpStatus.NO_CONTENT);
+        }).orElseThrow(() -> {
+            return new ResourceNotFoundException();
+        });
+    }
+
+    private ResponseEntity<RepresentationModel<?>> saveAndReturn(Object domainObject, RepositoryInvoker invoker, HttpMethod httpMethod, PersistentEntityResourceAssembler assembler, boolean returnBody) {
+        this.publisher.publishEvent(new BeforeSaveEvent(domainObject));
+        Object obj = invoker.invokeSave(domainObject);
+        this.publisher.publishEvent(new AfterSaveEvent(obj));
+        PersistentEntityResource resource = assembler.toFullResource(obj);
+        HttpHeaders headers = this.headersPreparer.prepareHeaders(Optional.of(resource));
+        if (HttpMethod.PUT.equals(httpMethod)) {
+            this.addLocationHeader(headers, assembler, obj);
+        }
+
+        return returnBody ? ControllerUtils.toResponseEntity(HttpStatus.OK, headers, resource) : ControllerUtils.toEmptyResponse(HttpStatus.NO_CONTENT, headers);
+    }
+
+    private ResponseEntity<RepresentationModel<?>> createAndReturn(Object domainObject, RepositoryInvoker invoker, PersistentEntityResourceAssembler assembler, boolean returnBody) {
+        this.publisher.publishEvent(new BeforeCreateEvent(domainObject));
+        Object savedObject = invoker.invokeSave(domainObject);
+        this.publisher.publishEvent(new AfterCreateEvent(savedObject));
+        Optional<PersistentEntityResource> resource = Optional.ofNullable(returnBody ? assembler.toFullResource(savedObject) : null);
+        HttpHeaders headers = this.headersPreparer.prepareHeaders(resource);
+        this.addLocationHeader(headers, assembler, savedObject);
+        return ControllerUtils.toResponseEntity(HttpStatus.CREATED, headers, resource);
+    }
+
+    private void addLocationHeader(HttpHeaders headers, PersistentEntityResourceAssembler assembler, Object source) {
+        String selfLink = assembler.getExpandedSelfLink(source).getHref();
+        headers.setLocation(UriTemplate.of(selfLink).expand(new Object[0]));
+    }
+
+    private Optional<Object> getItemResource(RootResourceInformation resourceInformation, Serializable id) throws HttpRequestMethodNotSupportedException, ResourceNotFoundException {
+        resourceInformation.verifySupportedMethod(HttpMethod.GET, ResourceType.ITEM);
+        return resourceInformation.getInvoker().invokeFindById(id);
+    }
+
+    static {
+        ACCEPT_PATCH_HEADERS = Arrays.asList(RestMediaTypes.MERGE_PATCH_JSON.toString(), RestMediaTypes.JSON_PATCH_JSON.toString(), "application/json");
+    }
+}
+```
+
