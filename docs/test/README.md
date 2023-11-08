@@ -5,8 +5,10 @@
 **Перед тестуванням сервісу в базі даних вже були дані щодо моїх сутностей (Assignment, TaskComment)**
 
 Заповнення таблиці Assignment:
+<img width="1077" alt="Screenshot 2023-11-08 at 12 37 37" src="https://github.com/mibal-ua/databases-course-work/assets/59470968/73ce0578-3ab7-4604-8a79-ab7e156623fe">
 
 Заповнення таблиці Task_comment:
+<img width="824" alt="Screenshot 2023-11-08 at 12 37 41" src="https://github.com/mibal-ua/databases-course-work/assets/59470968/8e4fb49e-ff62-40f8-9e71-dcf86aeb339f">
 
 ## Файл з http тестами
 
