@@ -462,6 +462,11 @@ COMMIT;
 
 ## RESTfull сервіс для управління даними
 
+**Діаграми Java класів:**
+
+![diagram](https://github.com/mibal-ua/databases-course-work/assets/59470968/2c6fc39e-da10-41e0-bc56-46e45976da97)
+
+
 ### Entities:
 
 **Assignment.java**
