@@ -1,20 +1,14 @@
 
-# Шаблон репозиторію для виконання лабораторних робіт з дисципліни "Організація баз даних"
+# Курсова робота з дисципліни "Організація баз даних"
 
 ## Як використовувати
 
-В цьому репозиторії знаходиться шаблон для виконання лабораторних робіт.
-
-Для виконання лабораторних робіт необхідно зробити ```fork``` цього репозіторію, склонувати вже власний репозіторій та розміщувати документацію у відповідних діректоріях ```./docs```.
-
-В цьому файлі необхідно вказати тему лабораторних робіт (назву проекту). Коротку загальну характеристику
-проекту, контактні дані виконавця, посилання на репо співвиконавців (за необхідністю).
-
+В цьому репозиторії знаходиться курсова робота.
 
 Шаблон публікування підготовлено з використанням [VuePress](https://vuepress.vuejs.org/), та стартера 
 [FriendlyUser/vuepress-theme-cool-starter](https://github.com/FriendlyUser/vuepress-theme-cool-starter).
 
-Щоб опублікувати проект у Github Pages, налаштовуємо Github Pages (гілка ```gh-pages```), змінюємо файл ```./publish.sh```
+Щоб опублікувати проєкт у Github Pages, запускаємо файл ```./publish.sh```
 
 ```sh
 
@@ -40,7 +34,7 @@ git commit -m 'deploy'
 # git push -f git@github.com:boldak/<USERNAME>.github.io.git master
 
 # if you are deploying to https://<USERNAME>.github.io/<REPO>
-git push -f https://github.com/<USERNAME>/dis-edu.git master:gh-pages
+git push -f https://github.com/mibal-ua/databases-course-work master:gh-pages
 
 cd -
 
